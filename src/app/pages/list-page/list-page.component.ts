@@ -4,10 +4,13 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, map, Subject } from 'rxjs';
 import { PokemonSummary } from '../../models/pokemon.model';
 import { PokemonService } from '../../services/pokemon.service';
+import { FavouritesService } from '../../services/favourites.service';
+import { FavouriteButtonComponent } from '../../components/favourite-button/favourite-button.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-list-page',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FavouriteButtonComponent, RouterLink],
   templateUrl: './list-page.component.html',
   styleUrl: './list-page.component.scss',
 })
@@ -20,6 +23,8 @@ export class ListPageComponent implements OnInit {
   readonly error = signal<string | null>(null);
 
   readonly searchControl = new FormControl('', { nonNullable: true });
+  private readonly favouritesService = inject(FavouritesService);
+  readonly favouritesCount = this.favouritesService.count;
 
   private readonly query = toSignal(
     this.searchControl.valueChanges.pipe(

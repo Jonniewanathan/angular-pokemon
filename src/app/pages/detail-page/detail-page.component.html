@@ -1,1 +1,20 @@
-<p>detail-page works!</p>
+<main>
+  <a routerLink="/">← Back</a>
+
+  @if (loading()) {
+    <p>Loading...</p>
+  } @else if (error()) {
+    <p>Error: {{ error() }}</p>
+  } @else if (detail(); as d) {
+    <h1>{{ d.name }} #{{ d.id }}</h1>
+    <app-favourite-button [name]="d.name" />
+    @if (d.sprites.front_default) {
+      <img [src]="d.sprites.front_default" [alt]="d.name" fill />
+    }
+    <p>Height: {{ d.height }} · Weight: {{ d.weight }}</p>
+    <p>Types: {{ typeNames() }}</p>
+    @if (isFavourite()) {
+      <app-note-form [name]="d.name" />
+    }
+  }
+</main>

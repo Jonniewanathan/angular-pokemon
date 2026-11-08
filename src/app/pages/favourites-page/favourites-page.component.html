@@ -1,1 +1,16 @@
-<p>favourites-page works!</p>
+<main>
+  <h1>Favourites</h1>
+
+  @if (favourites().length === 0) {
+    <p>No favourites yet.</p>
+  } @else {
+    <ul>
+      @for (name of favourites(); track name) {
+        <li>
+          <a [routerLink]="['/pokemon', name]">{{ name }}</a>
+          <app-favourite-button [name]="name" />
+        </li>
+      }
+    </ul>
+  }
+</main>

@@ -1,1 +1,31 @@
-<p>note-form works!</p>
+<form [formGroup]="form" (ngSubmit)="save()">
+  <label for="note">Note</label>
+  <br />
+  <textarea
+    id="note"
+    rows="3"
+    formControlName="note"
+    [attr.aria-invalid]="noteControl.touched && noteControl.invalid"
+    [attr.aria-describedby]="noteControl.touched && noteControl.invalid ? 'note-error' : null"
+  ></textarea>
+  <br />
+  <small>{{ noteControl.value.length }}/100</small>
+
+  @if (noteControl.touched && noteControl.errors; as errors) {
+    <p id="note-error" role="alert">
+      @if (errors['required']) {
+        Note is required
+      } @else if (errors['minlength']) {
+        Note must be at least 3 characters
+      } @else if (errors['maxlength']) {
+        Note must be 100 characters or fewer
+      }
+    </p>
+  }
+
+  <button type="submit">Save note</button>
+
+  @if (savedNote()) {
+    <p>Saved note: {{ savedNote() }}</p>
+  }
+</form>

@@ -1,1 +1,9 @@
-<app-list-page />
+<nav>
+  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    Pokémon
+  </a>
+  <a routerLink="/favourites" routerLinkActive="active">
+    Favourites ({{ favouritesCount() }})
+  </a>
+</nav>
+<router-outlet />

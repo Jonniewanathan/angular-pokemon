@@ -1,5 +1,6 @@
 <main>
   <h1>Pokémon browser</h1>
+  <p>Favourites: {{ favouritesCount() }}</p>
 
   @if (loading()) {
     <p>Loading...</p>
@@ -10,7 +11,10 @@
     <p>{{ matches().length }} results</p>
     <ul>
       @for (p of matches().slice(0, 50); track p.name) {
-        <li>{{ p.name }}</li>
+        <li>
+          <a [routerLink]="['/pokemon', p.name]">{{ p.name }}</a>
+          <app-favourite-button [name]="p.name" />
+        </li>
       }
     </ul>
   }
