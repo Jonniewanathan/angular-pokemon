@@ -1,0 +1,15 @@
+<main>
+  <h1>Pokémon browser</h1>
+
+  @if (loading()) {
+    <p>Loading...</p>
+  } @else if (error()) {
+    <p>Error: {{ error() }}</p>
+  } @else {
+    <ul>
+      @for (p of pokemon().slice(0, 50); track p.name) {
+        <li>{{ p.name }}</li>
+      }
+    </ul>
+  }
+</main>
