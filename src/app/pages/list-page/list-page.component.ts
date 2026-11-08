@@ -1,10 +1,13 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, DestroyRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, map, Subject } from 'rxjs';
 import { PokemonSummary } from '../../models/pokemon.model';
 import { PokemonService } from '../../services/pokemon.service';
 
 @Component({
   selector: 'app-list-page',
+  imports: [ReactiveFormsModule],
   templateUrl: './list-page.component.html',
   styleUrl: './list-page.component.scss',
 })
@@ -15,6 +18,19 @@ export class ListPageComponent implements OnInit {
   readonly pokemon = signal<PokemonSummary[]>([]);
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
+
+  readonly searchControl = new FormControl('', { nonNullable: true });
+
+  private readonly query = toSignal(
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      map((value) => value.trim().toLowerCase()),
+      distinctUntilChanged(),
+    ),
+    { initialValue: '' },
+  );
+
+  readonly matches = computed(() => this.pokemon().filter((p) => p.name.includes(this.query())));
 
   ngOnInit(): void {
     this.pokemonService

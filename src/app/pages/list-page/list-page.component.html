@@ -6,8 +6,10 @@
   } @else if (error()) {
     <p>Error: {{ error() }}</p>
   } @else {
+    <input [formControl]="searchControl" placeholder="Search Pokémon" />
+    <p>{{ matches().length }} results</p>
     <ul>
-      @for (p of pokemon().slice(0, 50); track p.name) {
+      @for (p of matches().slice(0, 50); track p.name) {
         <li>{{ p.name }}</li>
       }
     </ul>
